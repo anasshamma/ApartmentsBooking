@@ -21,6 +21,8 @@ class Apartment extends Model
         'has_wifi',
         'has_parking',
         'is_available',
+        'first_photo',
+        'second_photo'
     ];
 
     protected $casts = [

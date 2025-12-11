@@ -31,6 +31,8 @@ class ApartmentController extends Controller
             'maxperson' => 'required|integer|min:1',
             'has_wifi' => 'boolean',
             'has_parking' => 'boolean',
+            'first_photo' => 'required|image|mimes:jpg,png,gif',
+            'second_photo' => 'nullable|image|mimes:jpg,png,gif',
         ]);
 
         if ($validator->fails()) {
@@ -39,11 +41,26 @@ class ApartmentController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        $apartmentData = $request->all();
-        $apartmentData['owner_id'] = $user->id;
+        $firstphotopath = $request->file('first_photo')->store('Apartment_photos', 'public');
+        $secondphotopath = null;
+        if ($request->hasFile('second_photo')) {
+            $secondphotopath = $request->file('second_photo')->store('Apartment_photos', 'public');
+        }
 
-        $apartment = Apartment::create($apartmentData);
-
+        $apartment = Apartment::create([
+            'province' => $request->province,
+            'city' => $request->city,
+            'address' => $request->address,
+            'price_per_night' => $request->price_per_night,
+            'first_photo' => $firstphotopath,
+            'second_photo' => $secondphotopath,
+            'bedrooms' => $request->bedrooms,
+            'bathroom' => $request->bathroom,
+            'maxperson' => $request->maxperson,
+            'has_wifi' => $request->has_wifi,
+            'has_parking' => $request->has_parking,
+            'owner_id' => $user->id
+        ]);
         return response()->json([
             'success' => true,
             'message' => 'تم إضافة الشقة بنجاح',

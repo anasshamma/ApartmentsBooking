@@ -73,7 +73,12 @@ class AuthController extends Controller
                 'message' => 'رقم الهاتف أو كلمة المرور غير صحيحة'
             ], 401);
         }
-
+        if ($user->status !== 'approved') {
+            return response()->json([
+                'success' => false,
+                'message' => 'حسابك قيد المراجعة،يرجى الانتظار حتى الموافقة'
+            ], 403);
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

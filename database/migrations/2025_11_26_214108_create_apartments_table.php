@@ -24,6 +24,8 @@ return new class extends Migration
             $table->boolean('has_parking')->default(false); //متوفر حديقة أم لا
             $table->boolean('has_wifi')->default(false); //متوفر انترنت أم لا
             $table->boolean('is_available')->default(true); //حالة التوفر
+            $table->string('first_photo');
+            $table->string('second_photo')->nullable();
             $table->timestamps();
         });
     }
