@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Apartment;
+use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -116,6 +118,36 @@ class AdminController extends Controller
         return response()->json([
             'success' => true,
             'message' => '  تم رفض المستخدم بنجاح'
+        ]);
+    }
+
+    // حذف مستخدم
+    public function deleteUser(Request $request, $id)
+    {
+        $user = $request->user();
+
+        // التحقق من صلاحية الآدمن
+        if (!$user->isAdmin()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'غير مصرح لك بالوصول'
+            ], 403);
+        }
+
+        $targetUser = User::find($id);
+
+        if (!$targetUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'المستخدم غير موجود'
+            ], 404);
+        }
+
+        $targetUser->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'تم حذف المستخدم بنجاح'
         ]);
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('users'); //ربط الشقة بصاحبها
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade'); //ربط الشقة بصاحبها
             $table->string('province'); //محافظة
             $table->string('city'); //مدينة
             $table->text('address'); //عنوان الكامل

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,3 +40,12 @@ Route::get('pending-registers', [AdminController::class, 'pendingRegistrations']
 Route::post('approve-register/{id}', [AdminController::class, 'approveRegistration'])->middleware('auth:sanctum');
 //رفض مستخدم
 Route::post('reject-register/{id}', [AdminController::class, 'rejectRegistration'])->middleware('auth:sanctum');
+//حذف مستخدم
+Route::delete('user/{id}', [AdminController::class, 'deleteUser'])->middleware('auth:sanctum');
+
+//الحجوزات
+//إنشاء حجز للمستأجر
+Route::post('createBooking', [BookingController::class, 'store'])->middleware('auth:sanctum');
+//
+
+//

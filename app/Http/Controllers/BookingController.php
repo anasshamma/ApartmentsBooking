@@ -6,7 +6,7 @@ use App\Models\Apartment;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use Carbon\Carbon;
 
 
 class BookingController extends Controller
@@ -27,8 +27,8 @@ class BookingController extends Controller
             'apartment_id' => 'required|exists:apartments,id',
             'check_in' => 'required|date|after:today',
             'check_out' => 'required|date|after:check_in',
-            'guests_count' => 'required|integer|min:1',
-            'special_requests' => 'nullable|string',
+            'person_number' => 'required|integer|min:1',
+
         ]);
 
         if ($validator->fails()) {
@@ -49,7 +49,7 @@ class BookingController extends Controller
         }
 
         // التحقق من عدد الضيوف
-        if ($request->guests_count > $apartment->max_guests) {
+        if ($request->person_number > $apartment->maxperson) {
             return response()->json([
                 'success' => false,
                 'message' => 'عدد الضيوف يتجاوز السعة القصوى للشقة'
@@ -67,11 +67,10 @@ class BookingController extends Controller
         $booking = Booking::create([
             'tenant_id' => $user->id,
             'apartment_id' => $apartment->id,
-            'check_in' => $request->check_in,
-            'check_out' => $request->check_out,
-            'guests_count' => $request->guests_count,
+            'check_in'   => Carbon::parse($request->check_in)->format('Y-m-d'),
+            'check_out'  => Carbon::parse($request->check_out)->format('Y-m-d'),
+            'person_number' => $request->person_number,
             'total_price' => $totalPrice,
-            'special_requests' => $request->special_requests,
             'status' => 'pending', // يحتاج موافقة صاحب الشقة
         ]);
 
@@ -128,8 +127,8 @@ class BookingController extends Controller
         $validator = Validator::make($request->all(), [
             'check_in' => 'required|date|after:today',
             'check_out' => 'required|date|after:check_in',
-            'guests_count' => 'required|integer|min:1',
-            'special_requests' => 'nullable|string',
+            'person_number' => 'required|integer|min:1',
+
         ]);
 
         if ($validator->fails()) {
@@ -149,7 +148,7 @@ class BookingController extends Controller
         }
 
         // التحقق من عدد الضيوف
-        if ($request->guests_count > $apartment->max_guests) {
+        if ($request->person_number > $apartment->maxperson) {
             return response()->json([
                 'success' => false,
                 'message' => 'عدد الضيوف يتجاوز السعة القصوى للشقة'
@@ -167,9 +166,8 @@ class BookingController extends Controller
         $booking->update([
             'check_in' => $request->check_in,
             'check_out' => $request->check_out,
-            'guests_count' => $request->guests_count,
+            'person_number' => $request->person_number,
             'total_price' => $totalPrice,
-            'special_requests' => $request->special_requests,
             'status' => 'pending', // يعود للحالة pending لموافقة صاحب الشقة
         ]);
 

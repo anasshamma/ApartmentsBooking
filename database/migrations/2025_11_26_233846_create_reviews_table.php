@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained('bookings'); //الحجز الذي يقيّمه المستأجر
-            $table->foreignId('tenant_id')->constrained('users'); //المستأجر الذي يقيّم
-            $table->foreignId('apartment_id')->constrained('apartments'); //الشقة التي تم تقييمها
+            $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade'); //الحجز الذي يقيّمه المستأجر
+            $table->foreignId('tenant_id')->constrained('users')->onDelete('cascade'); //المستأجر الذي يقيّم
+            $table->foreignId('apartment_id')->constrained('apartments')->onDelete('cascade'); //الشقة التي تم تقييمها
             $table->integer('rating')->between(1, 5); //تقييم من 1 الى 5
             $table->text('comment')->nullable(); //التعليق الذي يكتبه المستأجر عن تجربته
             $table->timestamps();

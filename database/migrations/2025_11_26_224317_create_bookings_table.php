@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained('users'); //رقم المستخدم المستأجر الذي قام بالحجز
-            $table->foreignId('apartment_id')->constrained('apartments'); //الشقة التي تم حجزها
-            $table->date('check-in'); //تاريخ بدء الحجز
-            $table->date('check-out'); //تاريخ انتهاء الحجز
+            $table->foreignId('tenant_id')->constrained('users')->onDelete('cascade'); //رقم المستخدم المستأجر الذي قام بالحجز
+            $table->foreignId('apartment_id')->constrained('apartments')->onDelete('cascade'); //الشقة التي تم حجزها
+            $table->date('check_in'); //تاريخ بدء الحجز
+            $table->date('check_out'); //تاريخ انتهاء الحجز
             $table->integer('person_number'); //عدد الأشخاص الذين سيقيمون في الشقة
             $table->double('total_price', 10, 2); //السعر الكلي للحجز
             //حالة الحجز (بانتظار الموافقة،تمت الموافقة،الرفض ،تم الالغاء من المستخدم،اكتمل الحجز)
