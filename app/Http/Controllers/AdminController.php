@@ -54,11 +54,11 @@ class AdminController extends Controller
             ], 403);
         }
 
-        $pendingUsers = User::where('status', 'pending')->paginate(10);
+        $users = User::paginate(10);
 
         return response()->json([
             'success' => true,
-            'users' => $pendingUsers
+            'users' => $users
         ]);
     }
 

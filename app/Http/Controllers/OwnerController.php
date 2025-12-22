@@ -108,4 +108,32 @@ class OwnerController extends Controller
             'apartments' => $apartments
         ]);
     }
+
+    // تغيير حالة حجز لمكتمل
+    public function completeBooking(Request $request, $id)
+    {
+        $user = $request->user();
+        $booking = Booking::with('apartment')->find($id);
+
+        if (!$booking) {
+            return response()->json([
+                'success' => false,
+                'message' => 'الحجز غير موجود'
+            ], 404);
+        }
+
+        if ($booking->apartment->owner_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'غير مصرح لك بتغيير حالة الحجز لمكتمل '
+            ], 403);
+        }
+
+        $booking->update(['status' => 'completed']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'تم تغيير حالة الحجز ل مكتمل '
+        ]);
+    }
 }

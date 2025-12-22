@@ -38,12 +38,14 @@ class ReviewController extends Controller
         }
 
         // التحقق من أن الحجز مكتمل
-        if ($booking->status !== 'completed') {
+        /* if ($booking->status !== 'completed') {
             return response()->json([
                 'success' => false,
                 'message' => 'يمكن التقييم فقط للحجوزات المكتملة'
             ], 422);
         }
+*/
+
 
         // التحقق من عدم وجود تقييم سابق
         if ($booking->review) {

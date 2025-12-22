@@ -46,13 +46,12 @@ class Booking extends Model
     // التوابع المساعدة
     public function canBeCancelled()
     {
-        return in_array($this->status, ['pending', 'approved']) &&
-            $this->check_in > now()->addDays(1);
+        return in_array($this->status, ['pending', 'approved']);
     }
 
     public function canBeModified()
     {
-        return $this->status === 'pending';
+        return in_array($this->status, ['pending', 'approved']);
     }
 
     public function calculateTotalPrice()

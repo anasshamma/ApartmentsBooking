@@ -4,7 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +48,23 @@ Route::delete('user/{id}', [AdminController::class, 'deleteUser'])->middleware('
 //الحجوزات
 //إنشاء حجز للمستأجر
 Route::post('createBooking', [BookingController::class, 'store'])->middleware('auth:sanctum');
-//
+//تعديل حجز
+Route::put('updateBooking/{idbooking}', [BookingController::class, 'update'])->middleware('auth:sanctum');
+//إلغاء حجز
+Route::post('cancelBooking/{idbooking}', [BookingController::class, 'cancel'])->middleware('auth:sanctum');
+//  عرض جميع حجوزات المستأجر مع معلومات الشقة المتعلقة بكل حجز
+Route::get('indexBooking', [BookingController::class, 'index'])->middleware('auth:sanctum');
 
-//
+//التقييم
+//اضافة تقييم من قبل المستأجر للحجز
+Route::post('createReview', [ReviewController::class, 'store'])->middleware('auth:sanctum');
+
+//المالك
+//عرض حجوزات شقق المالك
+Route::get('ownerbookings', [OwnerController::class, 'bookings'])->middleware('auth:sanctum');
+//الموافقة على حجز
+Route::post('approve-booking/{id}', [OwnerController::class, 'approveBooking'])->middleware('auth:sanctum');
+//رفض حجز
+Route::post('reject-booking/{id}', [OwnerController::class, 'rejectBooking'])->middleware('auth:sanctum');
+//عرض شقق المالك
+Route::get('ownerapartments', [OwnerController::class, 'apartments'])->middleware('auth:sanctum');
