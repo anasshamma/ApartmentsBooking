@@ -132,4 +132,57 @@ class ApartmentController extends Controller
             'apartments' => $apartments
         ]);
     }
+    public function toggleFavorite(Request $request, $id)
+    {
+
+        $user = $request->user();
+
+        if (!$user->isTenant()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'غير مصرح لك بالوصول'
+            ], 403);
+        }
+        $apartment = Apartment::findOrFail($id);
+
+        $apartment->update([
+            'is_favorite' => !$apartment->is_favorite
+        ]);
+
+        $message = $apartment->is_favorite
+            ? 'تمت إضافة الشقة إلى المفضلة'
+            : 'تمت إزالة الشقة من المفضلة';
+
+        return response()->json([
+            'success'      => true,
+            'message'      => $message,
+            'is_favorite'  => $apartment->refresh()->is_favorite
+        ]);
+    }
+    public function favoriteApartments(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user->isTenant()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'غير مصرح لك بالوصول '
+            ], 403);
+        }
+
+        $favorites = Apartment::where('is_favorite', true)->get();
+
+        if ($favorites->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'لا يوجد شقق بالمفضلة',
+                'data' => []
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $favorites
+        ]);
+    }
 }

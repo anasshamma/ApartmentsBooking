@@ -68,3 +68,8 @@ Route::post('approve-booking/{id}', [OwnerController::class, 'approveBooking'])-
 Route::post('reject-booking/{id}', [OwnerController::class, 'rejectBooking'])->middleware('auth:sanctum');
 //عرض شقق المالك
 Route::get('ownerapartments', [OwnerController::class, 'apartments'])->middleware('auth:sanctum');
+//المفضلة
+//اضافة وإزالة شقة للمفضلة
+Route::post('apartments/{id}/favorite', [ApartmentController::class, 'toggleFavorite'])->middleware('auth:sanctum');
+//عرض الشقق المفضلة
+Route::get('apartments/favorites', [ApartmentController::class, 'favoriteApartments'])->middleware('auth:sanctum');
